@@ -24,7 +24,6 @@
     <webjars-font-awesome.version>4.7.0</webjars-font-awesome.version>
 
     <jacoco.version>0.8.7</jacoco.version>
-    <nohttp-checkstyle.version>0.0.10</nohttp-checkstyle.version>
     <spring-format.version>0.0.31</spring-format.version>
 
   </properties>
@@ -128,40 +127,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.1.2</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>8.45.1</version>
-          </dependency>
-          <dependency>
-            <groupId>io.spring.nohttp</groupId>
-            <artifactId>nohttp-checkstyle</artifactId>
-            <version>${nohttp-checkstyle.version}</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <id>nohttp-checkstyle-validation</id>
-            <phase>validate</phase>
-            <configuration>
-              <configLocation>src/checkstyle/nohttp-checkstyle.xml</configLocation>
-              <suppressionsLocation>src/checkstyle/nohttp-checkstyle-suppressions.xml</suppressionsLocation>
-              <encoding>UTF-8</encoding>
-              <sourceDirectories>${basedir}</sourceDirectories>
-              <includes>**/*</includes>
-              <excludes>**/.git/**/*,**/.idea/**/*,**/target/**/,**/.flattened-pom.xml,**/*.class</excludes>
-            </configuration>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <executions>
@@ -202,29 +167,7 @@
         </executions>
       </plugin>
 
-      <!-- Spring Boot Actuator displays build-related information if a git.properties
-        file is present at the classpath -->
-      <plugin>
-        <groupId>pl.project13.maven</groupId>
-        <artifactId>git-commit-id-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>revision</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <verbose>true</verbose>
-          <dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
-          <generateGitPropertiesFile>true</generateGitPropertiesFile>
-          <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties
-          </generateGitPropertiesFilename>
-          <failOnNoGitDirectory>false</failOnNoGitDirectory>
-          <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
-        </configuration>
-      </plugin>
-
+     
     </plugins>
   </build>
 
@@ -235,7 +178,26 @@
     </license>
   </licenses>
 
-  <repositories>
+
+    <repositories>
+      <repository>
+        <id>central</id>
+        <url>http://nexus3-nexus.apps.cluster-2vplz.2vplz.sandbox789.opentlc.com/repository/maven-public/</url>
+      </repository>
+  </repositories>
+
+  <distributionManagement>
+      <snapshotRepository>
+        <id>nexus-snapshots</id>
+        <url>http://nexus3-nexus.apps.cluster-2vplz.2vplz.sandbox789.opentlc.com/repository/maven-snapshots/</url>
+      </snapshotRepository>
+      <repository>
+        <id>nexus-releases</id>
+        <url>http://nexus3-nexus.apps.cluster-2vplz.2vplz.sandbox789.opentlc.com/repository/maven-releases/</url>
+      </repository>
+    </distributionManagement>
+
+  <!--
     <repository>
       <id>spring-snapshots</id>
       <name>Spring Snapshots</name>
@@ -252,7 +214,7 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
-  </repositories>
+    -->
 
   <pluginRepositories>
     <pluginRepository>
@@ -344,19 +306,6 @@
               <configuration>
                 <lifecycleMappingMetadata>
                   <pluginExecutions>
-                    <pluginExecution>
-                      <pluginExecutionFilter>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-checkstyle-plugin</artifactId>
-                        <versionRange>[1,)</versionRange>
-                        <goals>
-                          <goal>check</goal>
-                        </goals>
-                      </pluginExecutionFilter>
-                      <action>
-                        <ignore />
-                      </action>
-                    </pluginExecution>
                     <pluginExecution>
                       <pluginExecutionFilter>
                         <groupId>org.springframework.boot</groupId>
